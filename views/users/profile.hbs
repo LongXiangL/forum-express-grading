@@ -17,6 +17,9 @@
         </p>
         <ul class="list-unstyled list-inline">
           <li><strong>{{user.commentedRestaurants.length}}</strong> 已評論餐廳</li>
+          <li><strong>{{user.FavoritedRestaurants.length}}</strong> 收藏的餐廳</li>
+          <li><strong>{{user.Followings.length}}</strong> followings (追蹤者)</li>
+          <li><strong>{{user.Followers.length}}</strong> followers (追隨者)</li>
         </ul>
         <p>
           {{#ifCond user.id user.id }}
@@ -38,23 +41,56 @@
     </div>
   </div>
 </div>
-
-<!--comments-->
-<div class="card my-4">
-  <div class="card-header">
-    <h5 class="card-title">{{user.commentedRestaurants.length}} 已評論餐廳</h5>
+<div class="col-md-4">
+  <div class="card">
+    <div class="card-header">
+      <strong>{{user.Followings.length}}</strong> followings (追蹤者)
+    </div>
+    <div class="card-body">
+      {{#each user.Followings}}
+      <a href="/users/{{this.id}}" class="text-decoration-none">
+        {{#if this.image}}
+        <img src="{{this.image}}" width="60" height="60" class="avatar" style="transition: opacity 0.5s; opacity:0;"
+          onload="this.style.opacity=1;" />
+        {{else}}
+        <img src="https://via.placeholder.com/60" width="60" height="60" class="avatar"
+          style="transition: opacity 0.5s; opacity:0;" onload="this.style.opacity=1;" />
+        {{/if}}
+      </a>
+      {{/each}}
+    </div>
   </div>
-  <div class="card-body">
-    <div class="row row-cols-md-12 g-4 ">
-      {{#each user.Comments}}
-      <div class="col-2">
-        <div class="card">
-          <a href="/restaurants/{{this.Restaurant.id}}">
-            <img class="img-fluid" src="{{this.Restaurant.image}}" alt="restaurant image">
-          </a>
-        </div>
-      </div>
+  <br />
+  <div class="card">
+    <div class="card-header">
+      <strong>{{user.Followers.length}}</strong> followers (追隨者)
+    </div>
+    <div class="card-body">
+      {{#each user.Followers}}
+      <a href="/users/{{this.id}}" class="text-decoration-none">
+        {{#if this.image}}
+        <img src="{{this.image}}" width="60" height="60" class="avatar" style="transition: opacity 0.5s; opacity:0;"
+          onload="this.style.opacity=1;" />
+        {{else}}
+        <img src="https://via.placeholder.com/60" width="60" height="60" class="avatar"
+          style="transition: opacity 0.5s; opacity:0;" onload="this.style.opacity=1;" />
+        {{/if}}
+      </a>
       {{/each}}
     </div>
   </div>
 </div>
+<div class="col-md-8">
+  <div class="card">
+    <div class="card-header">
+      <strong>{{user.commentedRestaurants.length}}</strong> 已評論餐廳
+    </div>
+    <div class="card-body">
+      {{#each user.commentedRestaurants}}
+      <a href="/restaurants/{{this.id}}" class="text-decoration-none">
+        <img src={{this.image}} width="60" height="60" class="avatar" style="transition: opacity 0.5s; opacity:0;"
+          onload="this.style.opacity=1;" />
+      </a>
+      {{/each}}
+    </div>
+  </div>
