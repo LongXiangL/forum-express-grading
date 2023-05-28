@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate (models) {
+    static associate(models) {
       Restaurant.belongsTo(models.Category, { foreignKey: 'categoryId' })
       Restaurant.hasMany(models.Comment, { foreignKey: 'restaurantId' })
       Restaurant.belongsToMany(models.User, {
@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         as: 'LikedUsers'
       })
     }
-  };
+  }
   Restaurant.init({
     name: DataTypes.STRING,
     tel: DataTypes.STRING,
@@ -35,6 +35,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Restaurant',
+    tableName: 'Restaurants',
     underscored: true
   })
   return Restaurant
