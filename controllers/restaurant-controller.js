@@ -4,7 +4,9 @@ const { getOffset, getPagination } = require('../helpers/pagination-helper')
 const restaurantController = {
   getRestaurants: (req, res, next) => {
     const DEFAULT_LIMIT = 9
+
     const categoryId = Number(req.query.categoryId) || ''
+
     const page = Number(req.query.page) || 1
     const limit = Number(req.query.limit) || DEFAULT_LIMIT
     const offset = getOffset(limit, page)
@@ -25,12 +27,14 @@ const restaurantController = {
       .then(([restaurants, categories]) => {
         const favoritedRestaurantsId = req.user && req.user.FavoritedRestaurants.map(fr => fr.id)
         const likedRestaurantsId = req.user && req.user.LikedRestaurants.map(lr => lr.id)
+
         const data = restaurants.rows.map(r => ({
           ...r,
           description: r.description.substring(0, 50),
           isFavorited: favoritedRestaurantsId.includes(r.id),
           isLiked: likedRestaurantsId.includes(r.id)
         }))
+
         return res.render('restaurants', {
           restaurants: data,
           categories,
@@ -51,11 +55,13 @@ const restaurantController = {
     })
       .then(restaurant => {
         if (!restaurant) throw new Error("Restaurant didn't exist!")
+
         return restaurant.increment('viewCount')
       })
       .then(restaurant => {
         const isFavorited = restaurant.FavoritedUsers.some(f => f.id === req.user.id)
         const isLiked = restaurant.LikedUsers.some(l => l.id === req.user.id)
+
         res.render('restaurant', {
           restaurant: restaurant.toJSON(),
           isFavorited,
@@ -119,8 +125,13 @@ const restaurantController = {
         }))
         restaurants.sort((a, b) => b.favoritedCount - a.favoritedCount)
         restaurants = restaurants.slice(0, 10)
-        res.render('top-restaurants', { restaurants: restaurants })
-      .catch(err => next(err))
+        res.render('top-restaurants', { restaurants })
+      })
+      .catch(err => {
+        console.error(err)
+        return res.render('top-restaurants', {})
+      })
   }
 }
+
 module.exports = restaurantController
